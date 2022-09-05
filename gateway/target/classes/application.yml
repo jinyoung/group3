@@ -1,0 +1,82 @@
+server:
+  port: 8088
+
+---
+
+spring:
+  profiles: default
+  cloud:
+    gateway:
+      routes:
+        - id: RoomManage
+          uri: http://localhost:8081
+          predicates:
+            - Path=/meetingRooms/**, /회의실리스트/**
+        - id: UserListManage
+          uri: http://localhost:8082
+          predicates:
+            - Path=/주소록관리/**, /사용자리스트/**
+        - id: RoomReservationApp
+          uri: http://localhost:8083
+          predicates:
+            - Path=/conferences/**, /예약리스트/**, /회의실정보/**
+        - id: 알람
+          uri: http://localhost:8084
+          predicates:
+            - Path=, 
+        - id: frontend
+          uri: http://localhost:8080
+          predicates:
+            - Path=/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "*"
+            allowedMethods:
+              - "*"
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+
+---
+
+spring:
+  profiles: docker
+  cloud:
+    gateway:
+      routes:
+        - id: RoomManage
+          uri: http://roomManage:8080
+          predicates:
+            - Path=/meetingRooms/**, /회의실리스트/**
+        - id: UserListManage
+          uri: http://userListManage:8080
+          predicates:
+            - Path=/주소록관리/**, /사용자리스트/**
+        - id: RoomReservationApp
+          uri: http://roomReservationApp:8080
+          predicates:
+            - Path=/conferences/**, /예약리스트/**, /회의실정보/**
+        - id: 알람
+          uri: http://알람:8080
+          predicates:
+            - Path=, 
+        - id: frontend
+          uri: http://frontend:8080
+          predicates:
+            - Path=/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "*"
+            allowedMethods:
+              - "*"
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+server:
+  port: 8080
